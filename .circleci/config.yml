@@ -42,13 +42,9 @@ workflows:
           filters:
             tags:
               only: /.*/
-            branches:
-              ignore:
-
-
       - deploy:
           filters:
-            tags:
-              only: /.*/
+            branches:
+              ignore: /dependabot\/.+/
           requires:
             - lint_and_unittest
