@@ -1,0 +1,51 @@
+version: 2.1
+
+executors:
+  my_executor:
+    docker:
+      - image: circleci/python:3.9.9
+    working_directory: ~/work
+
+commands:
+  lint_and_unittest:
+    steps:
+      - run:
+          name: lint_and_unittest
+          command: |
+            echo lint and unittest
+
+  deploy:
+    steps:
+      - run:
+          name: deploy
+          command: |
+            echo deploy
+
+jobs:
+  lint_and_unittest:
+    executor: my_executor
+    steps:
+      - checkout
+      - lint_and_unittest
+
+  deploy:
+    executor: my_executor
+    steps:
+      - checkout
+      - deploy
+
+workflows:
+  version: 2
+  my_workflow:
+    jobs:
+      - lint_and_unittest:
+          filters:
+            tags:
+              only: /.*/
+
+      - deploy:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - lint_and_unittest
